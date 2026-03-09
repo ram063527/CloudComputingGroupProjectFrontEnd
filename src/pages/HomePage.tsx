@@ -17,7 +17,11 @@ export const HomePage: React.FC = () => {
   const [filters, setFilters] = useState<{ genre?: string; minPrice?: number; maxPrice?: number }>({});
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { initialized } = useKeycloak();
+
   const fetchProducts = useCallback(async () => {
+    if (!initialized) return;
+    
     try {
       setLoading(true);
       setError(null);

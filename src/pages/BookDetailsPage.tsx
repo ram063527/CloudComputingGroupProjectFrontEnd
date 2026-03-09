@@ -12,8 +12,10 @@ export const BookDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { initialized } = useKeycloak();
+
   useEffect(() => {
-    if (code) {
+    if (initialized && code) {
       catalogApi.getProductByCode(code)
         .then(setProduct)
         .catch(err => {
@@ -22,7 +24,7 @@ export const BookDetailsPage: React.FC = () => {
         })
         .finally(() => setLoading(false));
     }
-  }, [code]);
+  }, [code, initialized]);
 
   if (loading) {
     return (

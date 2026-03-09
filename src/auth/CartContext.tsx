@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { cartApi, CartResponseDTO } from '../api/cart';
 import { useKeycloak } from './KeycloakContext';
-import { setupAxiosInterceptors } from '../api/axios';
 
 interface CartContextType {
   cart: CartResponseDTO | null;
@@ -10,8 +9,6 @@ interface CartContextType {
   updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
-  isCartOpen: boolean;
-  setIsCartOpen: (isOpen: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,22 +24,17 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartResponseDTO | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const { authenticated, token } = useKeycloak();
+  const { authenticated, initialized } = useKeycloak();
 
   useEffect(() => {
-    if (token) {
-      setupAxiosInterceptors(token);
+    if (initialized) {
+      if (authenticated) {
+        fetchCart();
+      } else {
+        setCart(null);
+      }
     }
-  }, [token]);
-
-  useEffect(() => {
-    if (authenticated && token) {
-      fetchCart();
-    } else {
-      setCart(null);
-    }
-  }, [authenticated, token]);
+  }, [authenticated, initialized]);
 
   const fetchCart = async () => {
     try {
@@ -65,9 +57,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setLoading(true);
       const data = await cartApi.addItemToCart(productCode, quantity);
       setCart(data);
-      setIsCartOpen(true);
+      alert('Item added to cart!');
     } catch (error) {
       console.error('Failed to add to cart', error);
+      alert('Failed to add item to cart. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -118,8 +111,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updateQuantity,
         removeItem,
         clearCart,
-        isCartOpen,
-        setIsCartOpen,
       }}
     >
       {children}

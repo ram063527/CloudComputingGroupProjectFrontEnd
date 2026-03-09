@@ -6,7 +6,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 export const Navbar: React.FC = () => {
   const { authenticated, login, logout, profile } = useKeycloak();
-  const { cart, setIsCartOpen } = useCart();
+  const { cart } = useCart();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('q') || '');
@@ -60,8 +60,8 @@ export const Navbar: React.FC = () => {
                   {profile?.firstName || profile?.username || 'User'}
                 </div>
               </div>
-              <button
-                onClick={() => setIsCartOpen(true)}
+              <Link
+                to="/cart"
                 className="relative rounded-full p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
               >
                 <ShoppingCart className="h-5 w-5" />
@@ -70,7 +70,7 @@ export const Navbar: React.FC = () => {
                     {totalItems}
                   </span>
                 )}
-              </button>
+              </Link>
               <button
                 onClick={() => logout()}
                 className="flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
