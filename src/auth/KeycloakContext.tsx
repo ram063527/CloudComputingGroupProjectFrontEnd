@@ -35,13 +35,17 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
   useEffect(() => {
     if (keycloakInstance) return;
 
-    const initKeycloak = async () => {
-      const kc = new Keycloak({
-        url: import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:9191',
-        realm: import.meta.env.VITE_KEYCLOAK_REALM || 'myrealm',
-        clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'myclient',
-      });
+    const kc = new Keycloak({
+      url: import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:9191',
+      realm: import.meta.env.VITE_KEYCLOAK_REALM || 'mylabs',
+      clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'bookstore-frontend',
+    });
+    
+    // Set instance immediately to prevent double-initialization in React Strict Mode
+    // which causes the Keycloak infinite refresh loop
+    keycloakInstance = kc;
 
+    const initKeycloak = async () => {
       try {
         const auth = await kc.init({
           onLoad: 'check-sso',
@@ -52,7 +56,6 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
         
         setAuthenticated(auth);
         setKeycloak(kc);
-        keycloakInstance = kc;
 
         if (auth) {
           const userProfile = await kc.loadUserProfile();

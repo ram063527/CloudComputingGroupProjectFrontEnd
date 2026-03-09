@@ -74,7 +74,7 @@ export const BookDetailsPage: React.FC = () => {
           <p className="mt-2 text-xl text-gray-500">by {product.author}</p>
           
           <div className="mt-6 flex items-center gap-4">
-            <p className="text-3xl font-bold text-gray-900">${product.price.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-gray-900">£{product.price.toFixed(2)}</p>
             <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${isAvailable ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
               {isAvailable ? 'In Stock' : 'Out of Stock'}
             </span>

@@ -22,7 +22,12 @@ export const HomePage: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      const hasFilters = searchQuery || filters.genre || filters.minPrice || filters.maxPrice;
+      const hasFilters = Boolean(
+        searchQuery || 
+        filters.genre || 
+        (filters.minPrice !== undefined && filters.minPrice !== null) || 
+        (filters.maxPrice !== undefined && filters.maxPrice !== null)
+      );
       
       let data;
       if (hasFilters) {

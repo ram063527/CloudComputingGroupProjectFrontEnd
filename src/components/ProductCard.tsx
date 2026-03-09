@@ -36,7 +36,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <p className="text-sm text-gray-500">{product.author}</p>
         <div className="flex flex-1 flex-col justify-end mt-2">
           <div className="flex items-center justify-between">
-            <p className="text-base font-semibold text-gray-900">${product.price.toFixed(2)}</p>
+            <p className="text-base font-semibold text-gray-900">£{product.price.toFixed(2)}</p>
             {!isAvailable && (
               <span className="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full uppercase tracking-wider">Out of Stock</span>
             )}
