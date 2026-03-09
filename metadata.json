@@ -1,0 +1,5 @@
+{
+  "name": "Bookstore Catalog",
+  "description": "A beautiful frontend for a Spring Boot catalog and cart API, secured with Keycloak.",
+  "requestFramePermissions": []
+}
