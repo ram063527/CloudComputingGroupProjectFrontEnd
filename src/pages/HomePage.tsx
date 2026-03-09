@@ -55,7 +55,7 @@ export const HomePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, filters, currentPage]);
+  }, [searchQuery, filters, currentPage, initialized]);
 
   useEffect(() => {
     fetchProducts();
