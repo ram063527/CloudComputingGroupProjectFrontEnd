@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { catalogApi, ProductShortResponseDTO, PageResultProductShortResponseDTO } from '../api/catalog';
 import { ProductCard } from '../components/ProductCard';
 import { Filters } from '../components/Filters';
+import { useKeycloak } from '../auth/KeycloakContext';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {

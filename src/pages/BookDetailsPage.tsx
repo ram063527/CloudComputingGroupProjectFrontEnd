@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { catalogApi, ProductDetailedResponseDTO } from '../api/catalog';
 import { useCart } from '../auth/CartContext';
+import { useKeycloak } from '../auth/KeycloakContext';
 import { ShoppingCart, ArrowLeft, Loader2 } from 'lucide-react';
 
 export const BookDetailsPage: React.FC = () => {
