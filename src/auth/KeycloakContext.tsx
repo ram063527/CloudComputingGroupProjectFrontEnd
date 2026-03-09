@@ -38,8 +38,8 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
     const initKeycloak = async () => {
       const kc = new Keycloak({
         url: import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:9191',
-        realm: import.meta.env.VITE_KEYCLOAK_REALM || 'master',
-        clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'frontend-client',
+        realm: import.meta.env.VITE_KEYCLOAK_REALM || 'myrealm',
+        clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'myclient',
       });
 
       try {
@@ -47,6 +47,7 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
           onLoad: 'check-sso',
           silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
           pkceMethod: 'S256',
+          checkLoginIframe: false, // Important for environments where iframe checking fails
         });
         
         setAuthenticated(auth);
@@ -66,6 +67,9 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
         };
       } catch (error) {
         console.error('Keycloak init failed', error);
+        // Even if init fails (e.g. due to network), set the instance so login can be attempted
+        setKeycloak(kc);
+        keycloakInstance = kc;
       }
     };
 
@@ -73,11 +77,17 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
   }, []);
 
   const login = () => {
-    if (keycloak) keycloak.login();
+    if (keycloak) {
+      keycloak.login().catch(err => console.error("Login failed", err));
+    } else {
+      alert("Authentication service is initializing or unavailable. Please try again.");
+    }
   };
 
   const logout = () => {
-    if (keycloak) keycloak.logout();
+    if (keycloak) {
+      keycloak.logout().catch(err => console.error("Logout failed", err));
+    }
   };
 
   return (
