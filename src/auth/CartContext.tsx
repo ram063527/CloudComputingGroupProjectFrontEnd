@@ -43,6 +43,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setCart(data);
     } catch (error) {
       console.error('Failed to fetch cart', error);
+      setCart(null);
     } finally {
       setLoading(false);
     }

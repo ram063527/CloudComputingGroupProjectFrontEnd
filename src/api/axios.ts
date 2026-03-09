@@ -12,8 +12,13 @@ export const setAuthToken = (token?: string) => {
 
 api.interceptors.request.use(
   (config) => {
-    if (currentToken) {
-      config.headers.Authorization = `Bearer ${currentToken}`;
+    // Do not send token for catalog requests to prevent Spring Security from rejecting public endpoints
+    if (currentToken && config.url && !config.url.startsWith('/catalog')) {
+      if (config.headers && typeof config.headers.set === 'function') {
+        config.headers.set('Authorization', `Bearer ${currentToken}`);
+      } else {
+        config.headers['Authorization'] = `Bearer ${currentToken}`;
+      }
     }
     return config;
   },
