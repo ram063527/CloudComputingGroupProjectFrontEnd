@@ -52,8 +52,6 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) 
     const initKeycloak = async () => {
       try {
         const auth = await kc.init({
-          onLoad: 'check-sso',
-          silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
           pkceMethod: 'S256',
           checkLoginIframe: false, // Important for environments where iframe checking fails
         });
